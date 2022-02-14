@@ -5,9 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="asserts/css/bootstrap431.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css"
-          integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.15.5/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css">
+    <link rel="stylesheet" href="asserts/css/http_unpkg.com_bootstrap-table@1.15.5_dist_bootstrap-table.css">
     <link rel="stylesheet" href="asserts/css/bootstrap-table-filter-control.css">
 </head>
 <body>
@@ -22,6 +21,7 @@
             <div id="toolbar">
                 <button id="forceRefresh" class="btn btn-success">强制刷新</button>
                 <button id="setConfig" class="btn btn-outline-success" onclick="setConfigBtn()">更改路径</button>
+<!--                <button id="open" class="btn" onclick="openFile()">打开文件</button>-->
             </div>
             <table
                     id="table"
@@ -44,7 +44,7 @@
                     data-page-size="25"
                     data-show-footer="false"
                     data-side-pagination="client"
-                    data-url="http://localhost:8081/v1/list"
+                    data-url="/v1/list"
                     data-response-handler="responseHandler"
                     data-filter-control="true"
                     visible-search="true"
@@ -196,6 +196,12 @@
             locale: 'zh-CN',
             columns: [
                 {
+                    field: 'state',
+                    checkbox: true,
+                    align: 'center',
+                    valign: 'middle'
+                },
+                {
                     title: "序号",
                     field: 'ID',
                     visible: false,
@@ -264,7 +270,7 @@
 
 <!--操作-->
 <script>
-    const baseUrl = "http://localhost:8081/v1"
+    const baseUrl = "/v1"
 
     function postData(url, data) {
         return fetch(baseUrl + url, {
@@ -312,6 +318,25 @@
         }).then(data=>{
             alert(data.message || "已提交命令")
         })
+    }
+
+    function openFile() {
+        let dataList = $('#table').bootstrapTable('getAllSelections');
+
+
+        if (dataList.length) {
+            dataList.map((data) =>{
+                if(data.absPath){
+                    window.open(data.absPath, "_blank");
+                }
+            })
+            $('#table').bootstrapTable('uncheckAll');
+        } else {
+            $("#warningcontent").html('未选择任何文件！');
+            $("#warningModal").modal();
+        }
+
+
     }
 
 </script>
