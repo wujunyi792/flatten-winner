@@ -2,7 +2,9 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/wujunyi792/gin-template-new/internal/response/dto"
+	"github.com/wujunyi792/flatten-winner/internal/handle/config"
+	"github.com/wujunyi792/flatten-winner/internal/handle/file"
+	"github.com/wujunyi792/flatten-winner/internal/response/dto"
 )
 
 func MainRouter(e *gin.Engine) {
@@ -18,4 +20,8 @@ func MainRouter(e *gin.Engine) {
 		}
 		c.JSON(res.Code/100, res)
 	})
+	v1 := e.Group("v1")
+	v1.GET("/list", file.HandleGetList)
+	v1.POST("/set", config.HandleSetPath)
+	v1.GET("work", file.HandleRunJob)
 }

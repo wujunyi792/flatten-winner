@@ -5,11 +5,8 @@ type GlobalConfig struct {
 	ProgramName string
 	AUTHOR      string
 	VERSION     string
-	Auth        struct {
-		Secret string
-		Issuer string
-	}
-	SQL struct {
+	PORT        string
+	SQL         struct {
 		Use    bool
 		Config struct {
 			TYPE     string
@@ -29,34 +26,7 @@ type GlobalConfig struct {
 			DB       int
 		}
 	}
-	OSS struct {
-		Use    bool
-		Config struct {
-			AccessKeySecret string
-			AccessKeyId     string
-			EndPoint        string
-			BucketName      string
-			BaseURL         string
-			Path            string
-		}
-	}
-	Mail struct {
-		Use    bool
-		Config struct {
-			SMTP     string
-			PORT     int
-			ACCOUNT  string
-			PASSWORD string
-		}
-	}
-	CMS struct {
-		Use    bool
-		Config struct {
-			SecretId   string
-			SecretKey  string
-			AppId      string
-			TemplateId string
-			Sign       string
-		}
+	SERVICE struct {
+		PASSKEY string
 	}
 }

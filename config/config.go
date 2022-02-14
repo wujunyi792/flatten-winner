@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"github.com/wujunyi792/gin-template-new/internal/logger"
+	"github.com/wujunyi792/flatten-winner/internal/logger"
 	"io/ioutil"
 	"os"
 )
