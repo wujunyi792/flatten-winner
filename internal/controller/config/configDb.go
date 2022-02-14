@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	config "github.com/wujunyi792/flatten-winner/internal/controller/file"
 	"github.com/wujunyi792/flatten-winner/internal/db"
 	"github.com/wujunyi792/flatten-winner/internal/logger"
 	"github.com/wujunyi792/flatten-winner/internal/model/Mysql"
@@ -46,6 +47,14 @@ func GetManage() *DBManage {
 }
 
 func SetFilePath(path string) (err error) {
+	var v Mysql.Config
+	GetManage().getGOrmDB().Model(&Mysql.Config{}).Where("config_name = ?", "path").Find(&v)
+	if v.ID != 0 {
+		err = config.DelAllPathFile(v.Value)
+		if err != nil {
+			return err
+		}
+	}
 	err = GetManage().getGOrmDB().Clauses(clause.OnConflict{
 		Columns:   []clause.Column{{Name: "config_name"}},
 		DoUpdates: clause.AssignmentColumns([]string{"value", "updated_at"}),

@@ -13,22 +13,20 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="javascript:location.reload();">HDU课程目录+</a>
+        <a class="navbar-brand" href="javascript:location.reload();">文件浏览+</a>
     </nav>
 </header>
 <div style="padding: 60px 15px 0;">
     <div class="row">
         <div class="col-12 col-sm-12 col-lg-12 col-xl-12">
             <div id="toolbar">
-                <button id="likelist" class="btn btn-success" data-toggle="modal" data-target="#likeModal">课程收藏夹
-                </button>
-                <button id="likelist2" class="btn btn-outline-success" onclick="addlike();">加入收藏</button>
-                <!--<button id="filter" class="btn btn-primary" onclick="filterreset();">重置筛选</button>-->
+                <button id="forceRefresh" class="btn btn-success">强制刷新</button>
+                <button id="setConfig" class="btn btn-outline-success" onclick="setConfigBtn()">更改路径</button>
             </div>
             <table
                     id="table"
                     data-toolbar="#toolbar"
-                    data-search="true"
+                    data-search="false"
                     data-show-refresh="true"
                     data-show-toggle="false"
                     data-show-fullscreen="true"
@@ -54,50 +52,6 @@
                     style="word-break:break-all">
             </table>
 
-            <!-- Modal -->
-            <div class="modal fade" id="likeModal" tabindex="-1" role="dialog" aria-labelledby="likeModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="likeModalLabel">课程收藏夹</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div id="liketoolbar">
-                                <button id="likeremove" class="btn btn-danger">删除收藏</button>
-                            </div>
-                            <table
-                                    id="liketable"
-                                    data-toolbar="#liketoolbar"
-                                    data-search="false"
-                                    data-show-refresh="false"
-                                    data-show-toggle="false"
-                                    data-show-fullscreen="true"
-                                    data-show-columns="true"
-                                    data-show-columns-toggle-all="true"
-                                    data-detail-view="true"
-                                    data-show-export="true"
-                                    data-click-to-select="true"
-                                    data-detail-formatter="detailFormatter"
-                                    data-minimum-count-columns="2"
-                                    data-show-pagination-switch="false"
-                                    data-pagination="true"
-                                    data-id-field="id"
-                                    data-page-list="[10, 25, 50, 100, all]"
-                                    data-show-footer="false"
-                                    data-side-pagination="client"
-                                    data-response-handler="responseHandler">
-                            </table>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <!-- Warning Modal -->
             <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel"
@@ -105,13 +59,29 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="warningModalLabel">提示</h5>
+                            <h5 class="modal-title" id="warningModalLabel">修改路径</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body" id="warningcontent">
-                            Warning Content Here.
+                            <div class="form-group row">
+                                <label for="path" class="col-sm-2 col-form-label">路径</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="path">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="keySec" class="col-sm-2 col-form-label">更改密钥</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="keySec">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-10">
+                                    <button class="btn btn-primary" onclick="submitPathChange()">更新</button>
+                                </div>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
@@ -136,18 +106,6 @@
                                 <li>
                                     <b>显示：</b>
                                     <text style="color: red">请在电脑端使用</text>
-                                </li>
-                                <li>
-                                    <b>关于数据：</b>
-                                    数据来自教务系统，有延迟（一小时左右），仅包含课程基础信息，首次加载需要大约10秒
-                                </li>
-                                <li>
-                                    <b>课程收藏夹：</b>
-                                    通过「加入收藏」按钮将课程加入收藏夹，课程收藏夹窗口提供「导出」按钮，可将课程信息下载到本地。
-                                </li>
-                                <li>
-                                    <b>搜索及筛选：</b>
-                                    通过主搜索框可以搜索所有可见列的信息。通过每一列的筛选框可以执行更详细的筛选。按「回车」执行搜索和筛选。
                                 </li>
                                 <li>
                                     <b>隐藏/显示列：</b>
@@ -176,16 +134,15 @@
 <script src="asserts/js/bootstrap431.js"></script>
 <script src="asserts/js/http_unpkg.com_bootstrap-table@1.15.5_dist_bootstrap-table.js"></script>
 <script src="asserts/js/bootstrap-table-filter-control.js"></script>
-<script src="asserts/js/http_unpkg.com_tableexport.jquery.plugin_tableExport.min.js"></script>
 <script src="asserts/js/http_unpkg.com_bootstrap-table@1.15.5_dist_bootstrap-table-locale-all.js"></script>
 <script src="asserts/js/bootstrap-table-export.js"></script>
 
 
 <!-- 主表格 -->
 <script>
-    var $table = $('#table')
-    var $remove = $('#remove')
-    var selections = []
+    let $table = $('#table')
+    let $remove = $('#remove')
+    let selections = []
 
     function getIdSelections() {
         return $.map($table.bootstrapTable('getSelections'), function (row) {
@@ -238,12 +195,6 @@
             classes: 'table table-bordered table-hover table-sm',
             locale: 'zh-CN',
             columns: [
-                // {
-                //     field: 'state',
-                //     checkbox: true,
-                //     align: 'center',
-                //     valign: 'middle'
-                // },
                 {
                     title: "序号",
                     field: 'ID',
@@ -291,16 +242,12 @@
             'check-all.bs.table uncheck-all.bs.table',
             function () {
                 $remove.prop('disabled', !$table.bootstrapTable('getSelections').length)
-
-                // save your data, here just save the current page
                 selections = getIdSelections()
-                // push or splice the selections if you want to save all data selections
             })
         $table.on('all.bs.table', function (e, name, args) {
-            // console.log(name, args)
         })
         $remove.click(function () {
-            var ids = getIdSelections()
+            let ids = getIdSelections()
             $table.bootstrapTable('remove', {
                 field: 'id',
                 values: ids
@@ -314,228 +261,58 @@
         $("#infoModal").modal()
     })
 </script>
-<!-- 收藏表格 -->
+
+<!--操作-->
 <script>
-    var $liketable = $('#liketable')
-    var $likeremove = $('#likeremove')
-    var selections = []
+    const baseUrl = "http://localhost:8081/v1"
 
-    function getIdSelections_like() {
-        return $.map($liketable.bootstrapTable('getSelections'), function (row) {
-            return row['ID']
-        })
+    function postData(url, data) {
+        return fetch(baseUrl + url, {
+            body: JSON.stringify(data),
+            headers: {
+                'content-type': 'application/json',
+            },
+            method: 'POST',
+        }).then((response) => {
+            if (response.status > 300) {
+                console.log(response.body || response)
+            }
+            return response
+        }).then(response => response.json())
     }
 
-    function responseHandler_like(res) {
-        $.each(res.rows, function (i, row) {
-            row.state = $.inArray(row.id, selections) !== -1
-        })
-        return res
+    function getData(url) {
+        return fetch(baseUrl + url, {
+            method: 'GET',
+            mode: "cors",
+        }).then((response) => {
+            if (response.status > 300) {
+                console.log(response.data || response)
+            }
+            return response
+        }).then(response => response.json())
     }
 
-    function detailFormatter_like(index, row) {
-        var html = []
-        $.each(row, function (key, value) {
-            html.push('<p><b>' + key + ':</b> ' + value + '</p>')
+    const forceBtn = $("#forceRefresh")
+    forceBtn.click(() => {
+        getData("/work").then(data => {
+            alert(data.message || "已提交命令")
         })
-        return html.join('')
-    }
-
-    function initTable_like() {
-        $liketable.bootstrapTable('destroy').bootstrapTable({
-            exportTypes: ['csv', 'txt', 'doc', 'excel'],
-            classes: 'table table-bordered table-hover table-sm',
-            locale: 'zh-CN',
-            columns: [
-                {
-                    field: 'state',
-                    checkbox: true,
-                    align: 'center',
-                    valign: 'middle'
-                },
-                {
-                    title: "序号",
-                    field: 'ID',
-                    visible: false,
-                    align: 'center',
-                },
-                {
-                    title: "学年",
-                    field: '学年',
-                    align: 'center',
-                    sortable: false,
-                    visible: false,
-                    filterControl: 'select'
-                },
-                {
-                    title: "学期",
-                    field: '学期',
-                    visible: false,
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'select'
-                },
-                {
-                    title: "课程名称",
-                    field: '课程名称',
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'input'
-                },
-                {
-                    title: "课程课号",
-                    field: '课程课号',
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'input'
-                },
-                {
-                    title: "课程代码",
-                    field: '课程代码',
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'input'
-                },
-                {
-                    title: "学分",
-                    field: '学分',
-                    align: 'center',
-                    sortable: true,
-                    filterControl: 'select'
-                },
-                {
-                    title: "上课时间",
-                    field: '上课时间',
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'input'
-                },
-                {
-                    title: "教师姓名",
-                    field: '姓名',
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'input'
-                },
-                {
-                    title: "教师所属学院",
-                    field: '开课学院',
-                    align: 'center',
-                    sortable: false,
-                    width: 200,
-                    widthUnit: 'px',
-                    filterControl: 'select'
-                },
-
-                {
-                    title: "上课地点",
-                    field: '上课地点',
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'select'
-                },
-                {
-                    title: "课程性质",
-                    field: '课程性质',
-                    align: 'center',
-                    sortable: false,
-                    filterControl: 'select'
-                },
-                {
-                    title: "上课班级",
-                    field: '上课班级',
-                    align: 'center',
-                    visible: false,
-                    width: 100,
-                    widthUnit: 'px',
-                    sortable: false,
-                    filterControl: 'input'
-                },
-
-            ]
-
-        })
-
-        $liketable.on('check.bs.table uncheck.bs.table ' +
-            'check-all.bs.table uncheck-all.bs.table',
-            function () {
-                $likeremove.prop('disabled', !$liketable.bootstrapTable('getSelections').length)
-                selections = getIdSelections_like()
-            })
-        $liketable.on('all.bs.table', function (e, name, args) {
-            // console.log(name, args)
-        })
-        $likeremove.click(function () {
-            let ids = getIdSelections_like()
-            // console.log(ids);
-            $liketable.bootstrapTable('remove', {
-                field: 'ID',
-                values: ids
-            })
-            $likeremove.prop('disabled', true)
-            freshLocalStorage();
-        })
-    }
-
-    $(function () {
-        initTable_like()
-        $('#locale').change(initTable_like)
-        let data = localStorage.getItem("likeable");
-        if (data != null) {
-            $("#liketable").bootstrapTable("refreshOptions", {
-                data: JSON.parse(data)
-            });
-        }
     })
-</script>
-<!-- 收藏筛选 -->
-<script>
-    function freshLocalStorage() {
-        let tmpData = $("#liketable").bootstrapTable("getData");
-        localStorage.setItem("likeable", JSON.stringify(tmpData));
+    const setConfigBtn = () => {
+        $("#warningModal").modal()
     }
 
-    function addlike() {
-        var data = $('#table').bootstrapTable('getAllSelections');
-
-
-        if (data.length) {
-            $("#likeModal").modal();
-            $('#table').bootstrapTable('uncheckAll');
-            $("#liketable").bootstrapTable("append", data);
-            freshLocalStorage();
-        } else {
-            $("#warningcontent").html('未选择任何课程！');
-            $("#warningModal").modal();
-        }
-
-
+    const submitPathChange = ()=>{
+        let path = $("#path").val()
+        let sec = $("#keySec").val()
+        postData('/set',{
+            path:path,
+            key:sec
+        }).then(data=>{
+            alert(data.message || "已提交命令")
+        })
     }
-
-    function filteroc() {
-        var status = $('#filter').html()
-        if (status == '打开筛选') {
-            $('#filter').html("重置筛选");
-            $('#table').bootstrapTable('refreshOptions', {
-                filterControl: 'True'
-            });
-        } else {
-            $('#filter').html("打开筛选");
-            initTable()
-            // $('#locale').change(initTable)
-        }
-    }
-
-    function filterreset() {
-        $('#table').bootstrapTable('resetSearch', true)
-    }
-
-    $(window).resize(function () {
-        $('#table').bootstrapTable('resetView', {
-            height: $(window).height() - 120
-        });
-    });
-
 
 </script>
 </body>

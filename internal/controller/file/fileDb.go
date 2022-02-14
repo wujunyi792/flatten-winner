@@ -44,7 +44,7 @@ func GetManage() *DBManage {
 }
 
 func DelAllPathFile(dir string) (err error) {
-	err = GetManage().getGOrmDB().Where("base_path = ?", dir).Delete(&Mysql.File{}).Error
+	err = GetManage().getGOrmDB().Unscoped().Where("base_path = ?", dir).Delete(&Mysql.File{}).Error
 	return err
 }
 

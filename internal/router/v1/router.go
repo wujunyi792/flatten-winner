@@ -23,5 +23,5 @@ func MainRouter(e *gin.Engine) {
 	v1 := e.Group("v1")
 	v1.GET("/list", file.HandleGetList)
 	v1.POST("/set", config.HandleSetPath)
-	v1.GET("work", file.HandleRunJob)
+	v1.GET("/work", file.HandleRunJob)
 }

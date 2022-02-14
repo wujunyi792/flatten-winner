@@ -20,7 +20,7 @@ func HandleGetList(c *gin.Context) {
 	}
 	res.Count = int(count)
 	res.Data = list
-	c.JSON(res.Count/100, res)
+	c.JSON(res.Code/100, res)
 }
 
 func HandleRunJob(c *gin.Context) {
@@ -34,5 +34,5 @@ func HandleRunJob(c *gin.Context) {
 		c.Abort()
 		return
 	}
-	c.JSON(res.Count/100, res)
+	c.JSON(res.Code/100, res)
 }

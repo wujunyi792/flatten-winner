@@ -23,7 +23,7 @@ type File struct {
 	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
 
 	BasePath       string    `json:"basePath"`
-	AbsPath        string    `json:"absPath" gorm:"unique"`
+	AbsPath        string    `json:"absPath"`
 	FileName       string    `json:"fileName"`
 	Size           int64     `json:"size"`
 	Mode           string    `json:"mode"`
